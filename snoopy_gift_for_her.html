@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Something For You 🐾</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+:root{
+  --cream:#FFF8F0;
+  --warm:#FFF0E0;
+  --red:#E8392A;
+  --red-soft:#FF6B5B;
+  --navy:#1B2A4A;
+  --gold:#F5C842;
+  --pink:#FFB3C6;
+  --soft-blue:#D6EAF8;
+  --text:#2C1810;
+  --text-soft:#7A5C50;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;}
+
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--navy);
+  color:var(--text);
+  cursor:default;
+}
+
+/* ===================== ENVELOPE SCREEN ===================== */
+#envelope-screen{
+  position:fixed;inset:0;
+  background:radial-gradient(ellipse at 50% 40%, #2A3F6F 0%, #0F1B3A 70%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:200;
+  transition:opacity 0.8s ease;
+}
+
+/* Stars */
+.star-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:0.2;transform:scale(1);}to{opacity:1;transform:scale(1.3);}}
+
+.envelope-label{
+  font-family:'Caveat',cursive;
+  font-size:1.3rem;
+  color:rgba(255,255,255,0.6);
+  margin-bottom:28px;
+  letter-spacing:2px;
+  animation:fadeUp 1s 0.3s both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* The envelope SVG wrapper */
+.envelope-wrap{
+  position:relative;
+  cursor:pointer;
+  animation:fadeUp 1s 0.5s both, floatEnv 3s 1.5s ease-in-out infinite;
+}
+@keyframes floatEnv{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+
+.envelope-wrap:hover .env-body{filter:brightness(1.05);}
+.envelope-wrap:hover{animation:fadeUp 1s 0.5s both, floatEnv 3s 1.5s ease-in-out infinite, envPulse 0.4s ease infinite alternate;}
+@keyframes envPulse{from{transform:scale(1);}to{transform:scale(1.02);}}
+
+.envelope-tap{
+  font-family:'Caveat',cursive;
+  font-size:1.1rem;
+  color:rgba(255,255,255,0.5);
+  margin-top:24px;
+  animation:fadeUp 1s 1s both, blink 1.5s 2s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:0.5;}50%{opacity:1;}}
+
+/* Opening animation */
+#envelope-screen.opening{animation:envelopeOpen 0.9s ease forwards;}
+@keyframes envelopeOpen{
+  0%{opacity:1;transform:scale(1);}
+  40%{opacity:1;transform:scale(1.06);}
+  100%{opacity:0;transform:scale(0.85) translateY(-40px);pointer-events:none;}
+}
+
+/* ===================== MAIN GIFT ===================== */
+#gift-wrap{
+  position:fixed;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  opacity:0;
+  background:var(--cream);
+  transition:opacity 1s 0.2s ease;
+}
+#gift-wrap.visible{opacity:1;}
+
+/* Night sky hero */
+.hero{
+  min-height:100vh;
+  background:radial-gradient(ellipse at 50% 30%, #2A3F6F 0%, #0D1B36 65%);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  padding:40px 20px;
+}
+
+.hero-stars{position:absolute;inset:0;pointer-events:none;}
+
+/* Snoopy on his doghouse, stargazing */
+.doghouse-scene{
+  position:relative;
+  margin-bottom:20px;
+  animation:sceneFloat 4s ease-in-out infinite;
+}
+@keyframes sceneFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+
+/* Moon */
+.moon{
+  position:absolute;
+  top:-40px;right:-30px;
+  font-size:52px;
+  animation:moonGlow 3s ease-in-out infinite alternate;
+  filter:drop-shadow(0 0 18px rgba(255,230,100,0.7));
+}
+@keyframes moonGlow{from{filter:drop-shadow(0 0 18px rgba(255,230,100,0.5));}to{filter:drop-shadow(0 0 30px rgba(255,230,100,0.9));}}
+
+/* Woodstock near snoopy */
+.woodstock-friend{
+  position:absolute;
+  top:18px;left:-22px;
+  font-size:22px;
+  animation:woodstockBob 1.8s ease-in-out infinite alternate;
+}
+@keyframes woodstockBob{from{transform:translateY(0) rotate(-5deg);}to{transform:translateY(-6px) rotate(5deg);}}
+
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,6vw,3.2rem);
+  color:white;
+  text-align:center;
+  line-height:1.2;
+  font-style:italic;
+  text-shadow:0 2px 20px rgba(0,0,0,0.4);
+  animation:fadeUp 1s 0.2s both;
+  max-width:500px;
+}
+.hero-title span{color:var(--gold);}
+
+.hero-sub{
+  font-family:'Caveat',cursive;
+  font-size:1.4rem;
+  color:rgba(255,255,255,0.65);
+  margin-top:12px;
+  animation:fadeUp 1s 0.5s both;
+  letter-spacing:1px;
+}
+
+.scroll-hint{
+  position:absolute;bottom:24px;
+  font-family:'Caveat',cursive;
+  color:rgba(255,255,255,0.4);
+  font-size:1rem;
+  letter-spacing:2px;
+  animation:bounce 2s ease-in-out infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* ===================== SECTIONS ===================== */
+.section{
+  padding:60px 24px;
+  display:flex;flex-direction:column;
+  align-items:center;gap:28px;
+  max-width:640px;margin:0 auto;
+}
+
+
+.section-label{
+  font-family:'Caveat',cursive;
+  font-size:1rem;
+  letter-spacing:3px;
+  color:var(--red);
+  text-transform:uppercase;
+  opacity:0.8;
+}
+
+/* --- SCRAPBOOK SECTION --- */
+.scrapbook-section{background:var(--cream);}
+
+.scrapbook-title{
+  font-family:'Playfair Display',serif;
+  font-size:2rem;
+  color:var(--navy);
+  text-align:center;
+  font-style:italic;
+}
+
+.scrapbook-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  width:100%;
+}
+
+.scrap-card{
+  background:white;
+  border-radius:6px;
+  padding:22px 18px 18px;
+  box-shadow:0 3px 14px rgba(0,0,0,0.08);
+  display:flex;flex-direction:column;align-items:center;
+  gap:10px;
+  position:relative;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+  cursor:default;
+}
+.scrap-card:hover{transform:rotate(0deg) scale(1.03) translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,0.12);}
+.scrap-card:nth-child(odd){transform:rotate(-1.5deg);}
+.scrap-card:nth-child(even){transform:rotate(1.2deg);}
+.scrap-card:nth-child(odd):hover{transform:rotate(0deg) scale(1.03) translateY(-4px);}
+
+/* Tape strip on cards */
+.tape{
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  width:40px;height:20px;
+  background:rgba(255,230,180,0.7);
+  border-radius:3px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.1);
+}
+
+.scrap-emoji{font-size:3rem;line-height:1;}
+.scrap-caption{
+  font-family:'Caveat',cursive;
+  font-size:1.05rem;
+  color:var(--text);
+  text-align:center;
+  line-height:1.4;
+}
+.scrap-tag{
+  background:var(--pink);
+  color:white;
+  font-size:0.7rem;
+  font-weight:800;
+  padding:3px 10px;
+  border-radius:50px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* Full-width card */
+.scrap-card.wide{
+  grid-column:1/-1;
+  flex-direction:row;
+  text-align:left;
+  padding:22px 24px;
+}
+.scrap-card.wide .scrap-caption{text-align:left;}
+
+/* --- DANCING SECTION --- */
+.dance-section{
+  background:linear-gradient(160deg, #1B2A4A 0%, #2A1040 100%);
+  width:100%;
+  border-radius:0;
+}
+.dance-section .section{max-width:580px;}
+
+.dance-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.9rem;
+  color:white;
+  text-align:center;
+  font-style:italic;
+}
+.dance-sub{
+  font-family:'Caveat',cursive;
+  font-size:1.2rem;
+  color:rgba(255,255,255,0.55);
+  text-align:center;
+}
+
+/* Dance floor */
+.dance-floor{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:30px 20px;
+  width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:20px;
+  position:relative;
+  overflow:hidden;
+}
+.dance-floor::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 100%, rgba(255,100,100,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* Disco lights */
+.disco-lights{
+  position:absolute;top:0;left:0;right:0;height:6px;
+  background:linear-gradient(90deg,
+    #FF6B6B,#FFD93D,#6BCBFF,#C8A4F8,#FF85A1,#6BCBFF,#FFD93D,#FF6B6B);
+  animation:discoScroll 2s linear infinite;
+  border-radius:24px 24px 0 0;
+}
+@keyframes discoScroll{from{background-position:0 0;}to{background-position:200px 0;}}
+
+/* Snoopy dancing SVG */
+.snoopy-dancer{
+  position:relative;
+  z-index:2;
+}
+
+/* Music notes floating */
+.note{
+  position:absolute;
+  font-size:20px;
+  pointer-events:none;
+  animation:noteFloat linear infinite;
+  opacity:0;
+}
+@keyframes noteFloat{
+  0%{transform:translateY(0) rotate(0deg);opacity:0;}
+  15%{opacity:0.8;}
+  85%{opacity:0.6;}
+  100%{transform:translateY(-90px) rotate(20deg);opacity:0;}
+}
+
+.dance-msg{
+  font-family:'Caveat',cursive;
+  font-size:1.2rem;
+  color:rgba(255,255,255,0.7);
+  text-align:center;
+  max-width:320px;
+  line-height:1.7;
+  position:relative;z-index:2;
+}
+
+/* Heart burst button */
+.heart-btn{
+  font-family:'Nunito',sans-serif;
+  font-weight:800;
+  font-size:1rem;
+  padding:13px 28px;
+  border-radius:50px;
+  border:none;
+  background:linear-gradient(135deg, var(--red), #FF6B5B);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 4px 18px rgba(232,57,42,0.4);
+  transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;z-index:2;
+  display:flex;align-items:center;gap:8px;
+}
+.heart-btn:hover{transform:scale(1.05);box-shadow:0 6px 24px rgba(232,57,42,0.5);}
+.heart-btn:active{transform:scale(0.97);}
+
+/* Floating hearts */
+.heart-pop{
+  position:fixed;
+  pointer-events:none;
+  z-index:999;
+  font-size:28px;
+  animation:heartFly 1.6s ease-out forwards;
+}
+@keyframes heartFly{
+  0%{transform:translateY(0) scale(0.5);opacity:1;}
+  100%{transform:translateY(-180px) scale(1.2) rotate(15deg);opacity:0;}
+}
+
+/* --- FINAL MESSAGE --- */
+.final-section{
+  background:var(--warm);
+  width:100%;
+}
+.final-section .section{padding:70px 24px 80px;}
+
+.final-card{
+  background:white;
+  border-radius:24px;
+  padding:44px 36px;
+  text-align:center;
+  box-shadow:0 8px 40px rgba(0,0,0,0.08);
+  border:1px solid rgba(232,57,42,0.12);
+  width:100%;
+  position:relative;
+  overflow:hidden;
+}
+.final-card::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%, rgba(255,180,180,0.12) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+.final-snoopy{
+  font-size:4.5rem;
+  animation:finalBob 2s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes finalBob{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-10px) rotate(3deg);}}
+
+.final-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.8rem,5vw,2.5rem);
+  color:var(--red);
+  font-style:italic;
+  margin:14px 0 8px;
+  line-height:1.2;
+}
+
+.final-hearts{
+  font-size:1.8rem;
+  letter-spacing:6px;
+  margin:10px 0 18px;
+  animation:heartRow 1.5s ease-in-out infinite alternate;
+}
+@keyframes heartRow{from{transform:scale(1);}to{transform:scale(1.06);}}
+
+.final-text{
+  font-size:1.05rem;
+  color:var(--text-soft);
+  line-height:1.85;
+  font-weight:600;
+  max-width:380px;
+  margin:0 auto;
+}
+
+.final-sign{
+  font-family:'Caveat',cursive;
+  font-size:1.4rem;
+  color:var(--red);
+  margin-top:22px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+
+/* confetti */
+.conf-piece{
+  position:fixed;
+  pointer-events:none;
+  z-index:500;
+  border-radius:3px;
+  animation:confPiece linear forwards;
+}
+@keyframes confPiece{
+  0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
+  100%{transform:translateY(105vh) rotate(540deg);opacity:0;}
+}
+
+/* Scroll reveal */
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in{opacity:1;transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- ===================== ENVELOPE ===================== -->
+<div id="envelope-screen">
+  <div class="star-field" id="envStars"></div>
+  <div class="envelope-label">✉ A little something just for you</div>
+
+  <div class="envelope-wrap" onclick="openEnvelope()" id="envWrap">
+    <!-- SVG Envelope -->
+    <svg width="260" height="190" viewBox="0 0 260 190" xmlns="http://www.w3.org/2000/svg">
+      <!-- Envelope body -->
+      <rect x="10" y="50" width="240" height="135" rx="10" fill="#FFF8F0" stroke="#E8392A" stroke-width="2.5"/>
+      <!-- Bottom fold lines -->
+      <line x1="10" y1="185" x2="130" y2="110" stroke="#F5C842" stroke-width="1.5" opacity="0.6"/>
+      <line x1="250" y1="185" x2="130" y2="110" stroke="#F5C842" stroke-width="1.5" opacity="0.6"/>
+      <!-- Envelope flap (closed) -->
+      <path d="M10 50 L130 118 L250 50 Z" fill="#E8392A"/>
+      <!-- Flap fold shadow -->
+      <path d="M10 50 L130 118 L250 50" stroke="#c0392b" stroke-width="1" fill="none"/>
+      <!-- Red heart seal -->
+      <g transform="translate(115,90)">
+        <path d="M15,5 C15,2 12,0 9,0 C6,0 3,2 3,5 L3,6 C3,9 15,16 15,16 C15,16 27,9 27,6 L27,5 C27,2 24,0 21,0 C18,0 15,2 15,5 Z" fill="var(--gold)" transform="translate(-15,-8) scale(0.75)"/>
+      </g>
+      <!-- Cute paw print stamp -->
+      <g transform="translate(200, 70)" opacity="0.5">
+        <circle cx="0" cy="0" r="4" fill="#E8392A"/>
+        <circle cx="-7" cy="-5" r="3" fill="#E8392A"/>
+        <circle cx="7" cy="-5" r="3" fill="#E8392A"/>
+        <circle cx="-10" cy="3" r="2.5" fill="#E8392A"/>
+        <circle cx="10" cy="3" r="2.5" fill="#E8392A"/>
+      </g>
+      <!-- "To:" text -->
+      <text x="40" y="80" font-family="Caveat, cursive" font-size="18" fill="#E8392A" opacity="0.7">To: You 🐾</text>
+      <!-- Decorative stamp area -->
+      <rect x="200" y="55" width="36" height="28" rx="3" fill="none" stroke="#E8392A" stroke-width="1.5" opacity="0.5"/>
+    </svg>
+
+    <div class="woodstock-friend" id="woodyEnv">🐤</div>
+    <div class="moon" id="moonEnv">🌕</div>
+  </div>
+
+  <div class="envelope-tap">tap to open 🐾</div>
+</div>
+
+<!-- ===================== GIFT WRAP ===================== -->
+<div id="gift-wrap">
+
+  <!-- HERO: Snoopy Stargazing -->
+  <div class="hero">
+    <div class="hero-stars" id="heroStars"></div>
+
+    <div class="doghouse-scene">
+      <div class="moon">🌕</div>
+      <div class="woodstock-friend">🐤</div>
+      <!-- Snoopy on doghouse SVG -->
+      <svg width="220" height="180" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+        <!-- Doghouse -->
+        <rect x="30" y="110" width="160" height="70" rx="6" fill="#C0392B"/>
+        <rect x="30" y="110" width="160" height="70" rx="6" fill="none" stroke="#8B2020" stroke-width="2"/>
+        <!-- Roof -->
+        <polygon points="15,115 110,60 205,115" fill="#8B2020"/>
+        <polygon points="15,115 110,60 205,115" fill="none" stroke="#6B1515" stroke-width="2"/>
+        <!-- Door -->
+        <ellipse cx="110" cy="175" rx="22" ry="28" fill="#1a0a0a" opacity="0.85"/>
+        <!-- Doghouse top plank -->
+        <rect x="25" y="112" width="170" height="8" rx="4" fill="#A02020"/>
+
+        <!-- Snoopy lying on roof -->
+        <!-- Body -->
+        <ellipse cx="110" cy="88" rx="42" ry="16" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="2"/>
+        <!-- Head -->
+        <ellipse cx="152" cy="76" rx="22" ry="20" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="2"/>
+        <!-- Ear -->
+        <ellipse cx="137" cy="80" rx="8" ry="16" fill="#1a1a1a" transform="rotate(-15 137 80)"/>
+        <!-- Snout -->
+        <ellipse cx="163" cy="82" rx="13" ry="9" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.5"/>
+        <!-- Nose -->
+        <ellipse cx="170" cy="79" rx="4" ry="3" fill="#1a1a1a"/>
+        <!-- Eye (looking up at stars) -->
+        <circle cx="148" cy="71" r="4" fill="#1a1a1a"/>
+        <circle cx="149" cy="70" r="1.2" fill="white"/>
+        <!-- Smile -->
+        <path d="M 157 85 Q 163 89 169 85" stroke="#1a1a1a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- Spot -->
+        <ellipse cx="158" cy="64" rx="7" ry="4.5" fill="#1a1a1a"/>
+        <!-- Tail -->
+        <path d="M 68 84 Q 50 72 55 62" stroke="#F5F5F5" stroke-width="7" fill="none" stroke-linecap="round"/>
+        <path d="M 68 84 Q 50 72 55 62" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <!-- Paws up toward stars -->
+        <ellipse cx="88" cy="74" rx="10" ry="7" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.5" transform="rotate(-40 88 74)"/>
+        <ellipse cx="108" cy="68" rx="10" ry="7" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.5" transform="rotate(-50 108 68)"/>
+      </svg>
+    </div>
+
+    <h1 class="hero-title">For the one who makes every night feel like <span>stargazing</span></h1>
+    <p class="hero-sub">a little gift, from the heart 🐾</p>
+
+    <!-- Floating stars around hero -->
+    <div style="position:absolute;font-size:18px;top:12%;left:8%;animation:twinkle 2s infinite alternate;color:rgba(255,230,100,0.8);">✦</div>
+    <div style="position:absolute;font-size:12px;top:18%;left:20%;animation:twinkle 2.4s 0.5s infinite alternate;color:rgba(255,230,100,0.6);">✦</div>
+    <div style="position:absolute;font-size:22px;top:8%;right:10%;animation:twinkle 1.8s 0.3s infinite alternate;color:rgba(255,230,100,0.9);">⭐</div>
+    <div style="position:absolute;font-size:14px;top:25%;right:18%;animation:twinkle 2.2s 1s infinite alternate;color:rgba(255,230,100,0.7);">✦</div>
+    <div style="position:absolute;font-size:10px;top:35%;left:6%;animation:twinkle 3s 0.7s infinite alternate;color:rgba(255,230,100,0.5);">★</div>
+    <div style="position:absolute;font-size:16px;top:40%;right:5%;animation:twinkle 2.6s 0.2s infinite alternate;color:rgba(255,230,100,0.7);">✦</div>
+
+    <div class="scroll-hint">↓ scroll ↓</div>
+  </div>
+
+  <!-- SCRAPBOOK SECTION -->
+  <div class="scrapbook-section">
+    <div class="section">
+      <div class="section-label reveal">📖 Little Moments</div>
+      <h2 class="scrapbook-title reveal">A Scrapbook of You</h2>
+
+      <div class="scrapbook-grid reveal">
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">🌙</div>
+          <div class="scrap-caption">The way you look when you're sleepy and happy at the same time</div>
+          <div class="scrap-tag">favorite</div>
+        </div>
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">🍂</div>
+          <div class="scrap-caption">Cozy days that feel like everything is exactly right</div>
+          <div class="scrap-tag">always</div>
+        </div>
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">🐾</div>
+          <div class="scrap-caption">The little things you do that I notice every single time</div>
+          <div class="scrap-tag">you</div>
+        </div>
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">🫧</div>
+          <div class="scrap-caption">Your laugh — the real one, the uncontrollable one</div>
+          <div class="scrap-tag">forever</div>
+        </div>
+
+        <div class="scrap-card wide">
+          <div class="tape"></div>
+          <div class="scrap-emoji" style="font-size:2.4rem;">🌸</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="scrap-caption">"You're the reason Snoopy dances. You're the reason everything feels like a warm Saturday morning."</div>
+            <div class="scrap-tag" style="align-self:flex-start;">from me</div>
+          </div>
+        </div>
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">🎵</div>
+          <div class="scrap-caption">Songs that remind me of you (there are too many)</div>
+          <div class="scrap-tag">playlist</div>
+        </div>
+
+        <div class="scrap-card">
+          <div class="tape"></div>
+          <div class="scrap-emoji">💛</div>
+          <div class="scrap-caption">How safe I feel just being near you</div>
+          <div class="scrap-tag">home</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- DANCING SNOOPY SECTION -->
+  <div class="dance-section">
+    <div class="section">
+      <div class="section-label reveal" style="color:rgba(255,255,255,0.5);">🕺 Just For You</div>
+      <h2 class="dance-title reveal">Snoopy does a little dance</h2>
+      <p class="dance-sub reveal">because you deserve a celebration every day</p>
+
+      <div class="dance-floor reveal" id="danceFloor">
+        <div class="disco-lights"></div>
+
+        <!-- Floating notes -->
+        <div class="note" style="left:15%;animation-duration:2.2s;animation-delay:0s;">♪</div>
+        <div class="note" style="left:35%;animation-duration:2.8s;animation-delay:0.7s;color:#FFD93D;">♫</div>
+        <div class="note" style="left:55%;animation-duration:2.4s;animation-delay:0.3s;color:#C8A4F8;">♩</div>
+        <div class="note" style="left:75%;animation-duration:3s;animation-delay:1s;color:#FF85A1;">♬</div>
+        <div class="note" style="left:88%;animation-duration:2.6s;animation-delay:0.5s;">♪</div>
+
+        <!-- Dancing Snoopy SVG -->
+        <div class="snoopy-dancer">
+          <svg width="160" height="200" viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg">
+            <style>
+              @keyframes danceBody{0%,100%{transform:rotate(-4deg) translateX(-4px);}50%{transform:rotate(4deg) translateX(4px);}}
+              @keyframes armL{0%,100%{transform:rotate(-30deg);}50%{transform:rotate(30deg);}}
+              @keyframes armR{0%,100%{transform:rotate(30deg);}50%{transform:rotate(-30deg);}}
+              @keyframes legL{0%,100%{transform:rotate(-20deg);}50%{transform:rotate(15deg);}}
+              @keyframes legR{0%,100%{transform:rotate(20deg);}50%{transform:rotate(-15deg);}}
+              @keyframes headBob{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-6px) rotate(5deg);}}
+              .dance-g{transform-origin:80px 120px;animation:danceBody 0.6s ease-in-out infinite;}
+            </style>
+            <g class="dance-g">
+              <!-- Body -->
+              <ellipse cx="80" cy="118" rx="28" ry="30" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="2.2"/>
+              <!-- Red scarf/shirt hint -->
+              <path d="M 54 108 Q 80 122 106 108" stroke="#E8392A" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <!-- Head -->
+              <g style="transform-origin:80px 85px;animation:headBob 0.6s ease-in-out infinite;">
+                <ellipse cx="80" cy="78" rx="26" ry="24" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="2.2"/>
+                <!-- Black spot -->
+                <ellipse cx="86" cy="64" rx="9" ry="5.5" fill="#1a1a1a"/>
+                <!-- Left ear -->
+                <ellipse cx="58" cy="82" rx="9" ry="17" fill="#1a1a1a" transform="rotate(-12 58 82)"/>
+                <!-- Snout -->
+                <ellipse cx="90" cy="86" rx="14" ry="10" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.8"/>
+                <!-- Nose -->
+                <ellipse cx="96" cy="82" rx="5" ry="4" fill="#1a1a1a"/>
+                <!-- Happy eyes -->
+                <path d="M 68 73 Q 72 70 76 73" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M 78 73 Q 82 70 86 73" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <!-- Big smile -->
+                <path d="M 83 90 Q 91 97 99 90" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+              </g>
+              <!-- Left arm dancing up -->
+              <g style="transform-origin:54px 108px;animation:armL 0.6s ease-in-out infinite;">
+                <ellipse cx="40" cy="98" rx="14" ry="8" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.8" transform="rotate(-40 40 98)"/>
+              </g>
+              <!-- Right arm dancing up -->
+              <g style="transform-origin:106px 108px;animation:armR 0.6s ease-in-out infinite;">
+                <ellipse cx="120" cy="98" rx="14" ry="8" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.8" transform="rotate(40 120 98)"/>
+              </g>
+              <!-- Left leg -->
+              <g style="transform-origin:68px 148px;animation:legL 0.6s ease-in-out infinite;">
+                <rect x="60" y="146" width="16" height="26" rx="8" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.8"/>
+              </g>
+              <!-- Right leg -->
+              <g style="transform-origin:92px 148px;animation:legR 0.6s ease-in-out infinite;">
+                <rect x="84" y="146" width="16" height="26" rx="8" fill="#F5F5F5" stroke="#1a1a1a" stroke-width="1.8"/>
+              </g>
+              <!-- Tail -->
+              <path d="M 108 124 Q 124 110 120 100" stroke="#F5F5F5" stroke-width="7" fill="none" stroke-linecap="round"/>
+              <path d="M 108 124 Q 124 110 120 100" stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+            <!-- Woodstock dancing beside -->
+            <g style="transform-origin:28px 155px;animation:danceBody 0.6s 0.3s ease-in-out infinite;">
+              <text x="18" y="162" font-size="28">🐤</text>
+            </g>
+          </svg>
+        </div>
+
+        <p class="dance-msg">Every single day, Snoopy and Woodstock do their little dance — just because you exist. 🎵</p>
+
+        <button class="heart-btn" onclick="burstHearts(event)">
+          💕 Send Love Back
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL MESSAGE -->
+  <div class="final-section">
+    <div class="section">
+      <div class="final-card reveal">
+        <div class="final-snoopy">🐶</div>
+        <h2 class="final-title">You are so deeply,<br>genuinely loved.</h2>
+        <div class="final-hearts">💕 🌸 💕</div>
+        <p class="final-text">
+          Not just on special days.<br>
+          Not just when things are easy.<br><br>
+          Every ordinary Tuesday.<br>
+          Every quiet moment.<br>
+          Every single version of you.<br><br>
+          Snoopy always said the best things in life are simple —<br>
+          a warm supper, a good friend, a full moon.<br><br>
+          <strong>You're all three. 🌕</strong>
+        </p>
+        <div class="final-sign">— with love, always 🐾</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end gift-wrap -->
+
+<script>
+// ===== STAR FIELD =====
+function makeStars(containerId, count){
+  const c = document.getElementById(containerId);
+  for(let i=0;i<count;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      width:${1+Math.random()*2.5}px;
+      height:${1+Math.random()*2.5}px;
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      animation-duration:${1.5+Math.random()*2.5}s;
+      animation-delay:${Math.random()*3}s;
+    `;
+    c.appendChild(s);
+  }
+}
+makeStars('envStars', 120);
+makeStars('heroStars', 80);
+
+// ===== OPEN ENVELOPE =====
+function openEnvelope(){
+  const env = document.getElementById('envelope-screen');
+  const gift = document.getElementById('gift-wrap');
+  env.classList.add('opening');
+  gift.classList.add('visible');
+  setTimeout(()=>{
+    env.style.display='none';
+    confettiBurst();
+    observeReveal();
+  }, 900);
+}
+
+// ===== CONFETTI =====
+function confettiBurst(){
+  const colors=['#E8392A','#F5C842','#FFB3C6','#C8A4F8','#6BCBFF','#a8e6cf','#FF6B5B'];
+  for(let i=0;i<70;i++){
+    const c=document.createElement('div');
+    c.className='conf-piece';
+    c.style.cssText=`
+      left:${Math.random()*100}vw;
+      top:-20px;
+      width:${7+Math.random()*8}px;
+      height:${7+Math.random()*8}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>0.4?'50%':'3px'};
+      animation-duration:${2+Math.random()*2.5}s;
+      animation-delay:${Math.random()*1.2}s;
+    `;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+// ===== REVEAL ON SCROLL =====
+function observeReveal(){
+  const items = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting) e.target.classList.add('in');
+    });
+  },{threshold:0.15});
+  items.forEach(el=>obs.observe(el));
+}
+
+// ===== HEART BURST =====
+function burstHearts(e){
+  const emojis=['💕','💖','💗','💝','🌸','⭐','✨','🐾'];
+  for(let i=0;i<14;i++){
+    const h=document.createElement('div');
+    h.className='heart-pop';
+    h.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    h.style.cssText=`
+      left:${e.clientX + (Math.random()-0.5)*120}px;
+      top:${e.clientY}px;
+      font-size:${20+Math.random()*20}px;
+      animation-delay:${Math.random()*0.4}s;
+      animation-duration:${1.2+Math.random()*0.8}s;
+    `;
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),2200);
+  }
+}
+
+// ===== NOTE LOOP =====
+// Make music notes loop infinitely
+document.querySelectorAll('.note').forEach(n=>{
+  n.style.animationIterationCount='infinite';
+});
+</script>
+</body>
+</html>
