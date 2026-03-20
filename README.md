@@ -1,4 +1,4 @@
-# 🐾 A Little Something For You
+# A Little Something For You 🐾 
 
 > *"For the one who makes every night feel like stargazing"*
 
